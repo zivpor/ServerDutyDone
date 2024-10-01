@@ -34,10 +34,10 @@ DueDay Date,                   --תאריך סיום המשימה
 UserId INT,  --מפתח זר לטבלת המשתמשים
 TaskName NVARCHAR(100), --שם המשימה
 GroupId int, --מפתח זר לטבלת הקבוצה
-StatusId int  --מפתח זר לטבלת סטטוס המשימה
- FOREIGN KEY (GroupId) REFERENCES Groups(GroupId)   -- 
- FOREIGN KEY (UserId) REFERENCES Users(UserId)   -- 
- FOREIGN KEY (StatusId) REFERENCES TaskStatus(StatusId)   --
+StatusId int,  --מפתח זר לטבלת סטטוס המשימה
+ FOREIGN KEY (GroupId) REFERENCES Groups(GroupId),   -- 
+ FOREIGN KEY (UserId) REFERENCES Users(UserId),   -- 
+ FOREIGN KEY (StatusId) REFERENCES TaskStatus(StatusId),   --
  FOREIGN KEY (TaskType) REFERENCES TaskType(TypeId)   --
 );
 
@@ -51,14 +51,36 @@ FOREIGN KEY (GroupType) REFERENCES GroupType(GroupTypeId),   --
 FOREIGN KEY (GroupAdmin) REFERENCES Users(UserId)   --
 );
 
+select * from Groups
+
 CREATE TABLE GroupType(
 GroupTypeId INT PRIMARY KEY ,        --מפתח ראשי
 GroupTypeName NVARCHAR(100)         --סוג הקבוצה
 );
 
+
+
+CREATE LOGIN [TaskAdminUser] WITH PASSWORD = 'kukuPassword';
+Go
+
+-- Create a user in the TamiDB database for the login
+CREATE USER [TaskAdminUser] FOR LOGIN [TaskAdminUser];
+Go
+
+-- Add the user to the db_owner role to grant admin privileges
+ALTER ROLE db_owner ADD MEMBER [TaskAdminUser];
+Go
+
 insert into TaskType values (1, N'מבחן')
-insert into TaskType values (1, N'עבודה')
-insert into TaskType values (1, N'מטלת בית')
-insert into TaskType values (1, N'חברית')
+insert into TaskType values (2, N'עבודה')
+insert into TaskType values (3, N'מטלת בית')
+insert into TaskType values (4, N'חברית')
+
+insert into TaskStatus values (1, N'עוד לא התחיל')
+insert into TaskStatus values (2, N'בתהליך')
+insert into TaskStatus values (3, N'נעשתה')
+
+
+--scaffold-DbContext "Server = (localdb)\MSSQLLocalDB;Initial Catalog=DutyDone_DB;User ID=TaskAdminUser;Password=kukuPassword;" Microsoft.EntityFrameworkCore.SqlServer -OutPutDir Models -Context ZivDBContext -DataAnnotations -force
 
 
