@@ -51,7 +51,7 @@ FOREIGN KEY (GroupType) REFERENCES GroupType(GroupTypeId),   --
 FOREIGN KEY (GroupAdmin) REFERENCES Users(UserId)   --
 );
 
-select * from Groups
+select * from TaskStatus
 
 CREATE TABLE GroupType(
 GroupTypeId INT PRIMARY KEY ,        --מפתח ראשי
