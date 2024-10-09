@@ -17,13 +17,13 @@ namespace ServerDutyDone
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            var app = builder.Build();
+            
 
             //Add Database to dependency injection
-            builder.Services.AddDbContext<ZivDBContext>(
-                    options => options.UseSqlServer("Server = (localdb)\\MSSQLLocalDB; Initial Catalog = DutyDone_DB; User ID = TaskAdminUser; Password = kukuPassword; Trusted_Connection = true; MultipleActiveResultSets = true"));
+            builder.Services.AddDbContext<ZivDBContext>(options => 
+            options.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Initial Catalog=DutyDone_DB;User ID=TaskAdminUser;Password=kukuPassword;Trusted_Connection=true;MultipleActiveResultSets=true;"));
 
-
+           
             #region Add Session
             builder.Services.AddDistributedMemoryCache();
             builder.Services.AddSession(options =>
@@ -33,6 +33,7 @@ namespace ServerDutyDone
                 options.Cookie.IsEssential = true;
             });
             #endregion
+            var app = builder.Build();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
