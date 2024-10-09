@@ -21,7 +21,7 @@ namespace ServerDutyDone
 
             //Add Database to dependency injection
             builder.Services.AddDbContext<ZivDBContext>(
-                    options => options.UseSqlServer(""));
+                    options => options.UseSqlServer("Server = (localdb)\\MSSQLLocalDB; Initial Catalog = DutyDone_DB; User ID = TaskAdminUser; Password = kukuPassword; Trusted_Connection = true; MultipleActiveResultSets = true"));
 
 
             #region Add Session
