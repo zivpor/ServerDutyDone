@@ -1,53 +1,99 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using ServerDutyDone.DTO;
 using ServerDutyDone.Models;
 
 
 namespace ServerDutyDone.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api")]
     [ApiController]
-    public class DutyDoneAPIController : ControllerBase
+    public class DutyDoneController : ControllerBase
     {
-        //a variable to hold a reference to the db context!
+
+        // הגדרת הקישור למסד הנתונים
         private ZivDBContext context;
-        //a variable that hold a reference to web hosting interface (that provide information like the folder on which the server runs etc...)
-        private IWebHostEnvironment webHostEnvironment;
-        //Use dependency injection to get the db context and web host into the constructor
-        public DutyDoneAPIController(ZivDBContext context, IWebHostEnvironment env)
+
+        //הגדרת סביבת העבודה
+        private IWebHostEnvironment WebHostenvironment;
+
+
+        // הגדרת פעולת בניית המחלקה 
+        public DutyDoneController(ZivDBContext context, IWebHostEnvironment webHostEnvironment)
         {
             this.context = context;
-            this.webHostEnvironment = env;
+            this.WebHostenvironment = webHostEnvironment;
         }
-        [HttpPost("register")]
-        public IActionResult Register([FromBody] DTO.UserDTO userDto)
+
+        // הגדרת פעולת התחברות
+        [HttpPost("Login")]
+        public IActionResult Login([FromBody] LoginInfo loginInfo)
+
         {
             try
             {
-                HttpContext.Session.Clear(); //Logout any previous login attempt
 
-                //Get model user class from DB with matching email. 
-                Models.User modelsUser = new User()
+                //LogOut any user that is already logged in
+                HttpContext.Session.Clear();
+
+                // קבלת פרטי המשתמש ממסד הנתונים
+                Models.User user = context.Users.FirstOrDefault(u => u.Email == loginInfo.Email);
+
+                // בדיקה האם המשתמש קיים
+                if (user == null)
                 {
-                    Username = userDto.Username,
-                    Email = userDto.Email,
-                    UserPassword = userDto.UserPassword
-                    
-                };
+                    return NotFound();
+                }
+                if (user.UserPassword != loginInfo.Password)
+                {
+                    return Unauthorized();
+                }
+                // HttpContext.Session its an object that allows you to store temporary data for the current user.
+                HttpContext.Session.SetString("LoggedInUser", user.Email);
 
-                context.Users.Add(modelsUser);
-                context.SaveChanges();
-
-                //User was added!
-                DTO.UserDTO dtoUser = new DTO.UserDTO(modelsUser);
-                return Ok(dtoUser);
+                // create a new DTO.User object based on the existing user object.
+                DTO.UserDTO DTO_User = new DTO.UserDTO(user);
+                // החזרת פרטי המשתמש
+                return Ok(DTO_User);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-
         }
+
+        [HttpPost("Register")]
+        public async Task<IActionResult> Register([FromBody] DTO.UserDTO user_dto)
+        {
+            if (user_dto == null)
+            {
+                return BadRequest("Invalid user data.");
+            }
+
+            // יצירת יוזר חדש בהתבסס על הקלט מהמשתמש
+            Models.User modeluser = new Models.User
+            {
+                Username = user_dto.Username,
+                Email = user_dto.Email,
+                UserPassword = user_dto.UserPassword,
+
+            };
+
+            // בדיקת תקינות אימייל ייחודי
+            var existingUser = await context.Users.FirstOrDefaultAsync(u => u.Email == user_dto.Email);
+            if (existingUser != null)
+            {
+                return Conflict("User with this email already exists.");
+            }
+
+            // הוספת המשתמש למסד הנתונים
+            context.Users.Add(modeluser);
+            await context.SaveChangesAsync(); // שמירת השינויים במסד הנתונים
+            return Ok(modeluser.UserId);
+        }
+
+
 
     }
 }
