@@ -9,9 +9,10 @@
         public UserDTO() { }
         public UserDTO(Models.User user)
         {
-            this.Email = Email;
-            this.Username = Username;
-            this.UserPassword = UserPassword;
+            this.Email = user.Email;
+            this.Username = user.Username;
+            this.UserPassword = user.UserPassword;
+            this.UserId = user.UserId;
         }
 
     }

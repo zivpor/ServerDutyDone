@@ -84,6 +84,8 @@ insert into TaskStatus values (1, N'עוד לא התחיל')
 insert into TaskStatus values (2, N'בתהליך')
 insert into TaskStatus values (3, N'נעשתה')
 
+
+insert into Users(Email, Username, UserPassword) values ('o@o.com','o','o1')
 SELECT*From Users
 
 --scaffold-DbContext "Server = (localdb)\MSSQLLocalDB;Initial Catalog=DutyDone_DB;User ID=TaskAdminUser;Password=kukuPassword;" Microsoft.EntityFrameworkCore.SqlServer -OutPutDir Models -Context ZivDBContext -DataAnnotations -force
