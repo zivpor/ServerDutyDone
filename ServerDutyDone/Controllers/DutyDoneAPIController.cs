@@ -38,7 +38,7 @@ namespace ServerDutyDone.Controllers
                 HttpContext.Session.Clear();
 
                 // קבלת פרטי המשתמש ממסד הנתונים
-                Models.User user = context.Users.FirstOrDefault(u => u.Username == loginInfo.Username);
+                Models.User? user = context.Users.FirstOrDefault(u => u.Email == loginInfo.Email);
 
                 // בדיקה האם המשתמש קיים
                 if (user == null)
