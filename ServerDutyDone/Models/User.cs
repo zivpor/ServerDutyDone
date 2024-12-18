@@ -20,6 +20,8 @@ public partial class User
     [StringLength(100)]
     public string? UserPassword { get; set; }
 
+    public bool IsAdmin { get; set; }
+
     [InverseProperty("GroupAdminNavigation")]
     public virtual ICollection<Group> Groups { get; set; } = new List<Group>();
 

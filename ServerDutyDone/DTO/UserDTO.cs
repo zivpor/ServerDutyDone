@@ -6,6 +6,7 @@
         public string Email { get; set; }
         public string Username { get; set; }
         public string UserPassword { get; set; }
+        public bool IsAdmin { get; set; }
         public UserDTO() { }
         public UserDTO(Models.User user)
         {
@@ -13,6 +14,7 @@
             this.Username = user.Username;
             this.UserPassword = user.UserPassword;
             this.UserId = user.UserId;
+            this.IsAdmin = user.IsAdmin;
         }
 
     }

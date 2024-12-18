@@ -15,6 +15,7 @@ UserId INT PRIMARY KEY Identity,        -- מפתח ראשי
 Email NVARCHAR(100),           --איימיל של המשתמש
 Username NVARCHAR(100),        --השם משתמש
 UserPassword NVARCHAR(100),    --הסיסמה של המשתמש
+IsAdmin bit default(0) not null --האם המשתמש הוא מנהל המערכת
 );
 
 CREATE TABLE TaskType(
@@ -86,6 +87,8 @@ insert into TaskStatus values (3, N'נעשתה')
 
 
 insert into Users(Email, Username, UserPassword) values ('o@o.com','o','o1')
+insert into Users(Email, Username, UserPassword, IsAdmin) values ('a@a.com','a','a1', 1)
+
 SELECT*From Users
 
 --scaffold-DbContext "Server = (localdb)\MSSQLLocalDB;Initial Catalog=DutyDone_DB;User ID=TaskAdminUser;Password=kukuPassword;" Microsoft.EntityFrameworkCore.SqlServer -OutPutDir Models -Context ZivDBContext -DataAnnotations -force
