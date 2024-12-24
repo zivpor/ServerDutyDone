@@ -92,7 +92,26 @@ namespace ServerDutyDone.Controllers
             await context.SaveChangesAsync(); // שמירת השינויים במסד הנתונים
             return Ok(modeluser.UserId);
         }
+        //פעולה שמחזירה רשימה של הקבוצות שהמחובר לא מנהל
+        [HttpPost("GetGroups")]
+        public IActionResult GetGroups()
+        {
+            try
+            {
+                //Check if who is logged in
+                string? userEmail = HttpContext.Session.GetString("loggedInUser");
+                if (string.IsNullOrEmpty(userEmail))
+                {
+                    return Unauthorized("User is not logged in");
+                }
+                List<DTO.GroupDTO> dtoGroups = new List<DTO.GroupDTO>();
 
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
 
     }
