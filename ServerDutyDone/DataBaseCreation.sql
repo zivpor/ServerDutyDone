@@ -76,18 +76,27 @@ Go
 ALTER ROLE db_owner ADD MEMBER [TaskAdminUser];
 Go
 
-insert into TaskType values (1, N'מבחן')
-insert into TaskType values (2, N'עבודה')
-insert into TaskType values (3, N'מטלת בית')
-insert into TaskType values (4, N'חברית')
+insert into TaskType values (1, N'test')
+insert into TaskType values (2, N'work')
+insert into TaskType values (3, N'house chore')
+insert into TaskType values (4, N'friendly')
 
-insert into TaskStatus values (1, N'עוד לא התחיל')
-insert into TaskStatus values (2, N'בתהליך')
-insert into TaskStatus values (3, N'נעשתה')
+insert into TaskStatus values (1, N'need to start')
+insert into TaskStatus values (2, N'being done')
+insert into TaskStatus values (3, N'done')
 
+insert into GroupType values (1,'class')
+insert into GroupType values (2,'work')
+insert into GroupType values (3,'friends')
+insert into GroupType values (4,'family')
 
 insert into Users(Email, Username, UserPassword) values ('o@o.com','o','o1')
 insert into Users(Email, Username, UserPassword, IsAdmin) values ('a@a.com','a','a1', 1)
+
+insert into Groups(GroupAdmin,GroupName,GroupType) values(1,'bffs',3)
+insert into Groups(GroupAdmin,GroupName,GroupType) values(2,'porat family',4)
+
+SELECT*From Groups
 
 SELECT*From Users
 

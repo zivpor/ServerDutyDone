@@ -99,12 +99,75 @@ namespace ServerDutyDone.Controllers
             try
             {
                 //Check if who is logged in
-                string? userEmail = HttpContext.Session.GetString("loggedInUser");
+                string? userEmail = HttpContext.Session.GetString("LoggedInUser");
                 if (string.IsNullOrEmpty(userEmail))
                 {
                     return Unauthorized("User is not logged in");
                 }
-                List<DTO.GroupDTO> dtoGroups = new List<DTO.GroupDTO>();
+
+                User? u = context.Users.Where(u => u.Email == userEmail).FirstOrDefault();
+
+                if (u == null)
+                {
+                    return Unauthorized("User is not logged in");
+                }
+
+                List<Group> groups = context.Groups.Where(g => g.GroupAdmin != u.UserId).ToList();
+                
+                List<GroupDTO> dtoGroups = new List<GroupDTO>();
+                foreach (var group in groups) 
+                {
+                    dtoGroups.Add(new GroupDTO(group));
+                }
+
+                return Ok(dtoGroups);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        //פעולה שמחזירה רשימה של הקבוצות שהמחובר  מנהל
+        [HttpPost("GetManagerGroups")]
+        public IActionResult GetManagerGroups()
+        {
+            try
+            {
+                //Check if who is logged in
+                string? userEmail = HttpContext.Session.GetString("LoggedInUser");
+                if (string.IsNullOrEmpty(userEmail))
+                {
+                    return Unauthorized("User is not logged in");
+                }
+
+                User? u = context.Users.Where(u => u.Email == userEmail).FirstOrDefault();
+
+                if (u == null)
+                {
+                    return Unauthorized("User is not logged in");
+                }
+
+                List<Group> groups = context.Groups.Where(g => g.GroupAdmin == u.UserId).ToList();
+
+                List<GroupDTO> dtoGroups = new List<GroupDTO>();
+                foreach (var group in groups)
+                {
+                    dtoGroups.Add(new GroupDTO(group));
+                }
+
+                return Ok(dtoGroups);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        //פעולה שמחזירה את סוג הקבוצה
+        [HttpPost("GetGroupType")]
+        public IActionResult GetGroupType()
+        {
+            try
+            {
 
             }
             catch (Exception ex)
