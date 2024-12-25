@@ -93,7 +93,7 @@ namespace ServerDutyDone.Controllers
             return Ok(modeluser.UserId);
         }
         //פעולה שמחזירה רשימה של הקבוצות שהמחובר לא מנהל
-        [HttpPost("GetGroups")]
+        [HttpGet("GetGroups")]
         public IActionResult GetGroups()
         {
             try
@@ -128,7 +128,7 @@ namespace ServerDutyDone.Controllers
             }
         }
         //פעולה שמחזירה רשימה של הקבוצות שהמחובר  מנהל
-        [HttpPost("GetManagerGroups")]
+        [HttpGet("GetManagerGroups")]
         public IActionResult GetManagerGroups()
         {
             try
@@ -162,19 +162,7 @@ namespace ServerDutyDone.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        //פעולה שמחזירה את סוג הקבוצה
-        [HttpPost("GetGroupType")]
-        public IActionResult GetGroupType()
-        {
-            try
-            {
-
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
+        
 
 
     }
