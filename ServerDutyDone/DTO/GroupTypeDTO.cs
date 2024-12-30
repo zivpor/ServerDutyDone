@@ -8,6 +8,7 @@
         public GroupTypeDTO(Models.GroupType groupType)
         {
             this.GroupTypeName = groupType.GroupTypeName;
+            this.GroupTypeId = groupType.GroupTypeId;
         }
     }
 }
