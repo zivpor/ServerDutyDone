@@ -57,6 +57,12 @@ StatusId int,  --מפתח זר לטבלת סטטוס המשימה
  FOREIGN KEY (TaskType) REFERENCES TaskType(TypeId)   --
 );
 
+CREATE TABLE UsersInGroup(
+UserId int FOREIGN KEY REFERENCES Users(UserId),
+GroupId int FOREIGN KEY REFERENCES Groups(GroupId),
+Primary key (UserId, GroupId)
+);
+
 
 
 select * from TaskStatus
@@ -97,6 +103,11 @@ insert into Users(Email, Username, UserPassword, IsAdmin) values ('a@a.com','a',
 
 insert into Groups(GroupAdmin,GroupName,GroupType) values(1,'bffs',3)
 insert into Groups(GroupAdmin,GroupName,GroupType) values(2,'porat family',4)
+
+insert into UsersInGroup values (2,1)
+insert into UsersInGroup values (1,2)
+
+
 
 SELECT*From Groups
 

@@ -27,4 +27,8 @@ public partial class User
 
     [InverseProperty("User")]
     public virtual ICollection<Task> Tasks { get; set; } = new List<Task>();
+
+    [ForeignKey("UserId")]
+    [InverseProperty("Users")]
+    public virtual ICollection<Group> GroupsNavigation { get; set; } = new List<Group>();
 }

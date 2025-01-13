@@ -30,4 +30,8 @@ public partial class Group
 
     [InverseProperty("Group")]
     public virtual ICollection<Task> Tasks { get; set; } = new List<Task>();
+
+    [ForeignKey("GroupId")]
+    [InverseProperty("GroupsNavigation")]
+    public virtual ICollection<User> Users { get; set; } = new List<User>();
 }

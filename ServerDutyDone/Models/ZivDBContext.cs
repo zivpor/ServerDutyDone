@@ -35,7 +35,7 @@ public partial class ZivDBContext : DbContext
     {
         modelBuilder.Entity<Group>(entity =>
         {
-            entity.HasKey(e => e.GroupId).HasName("PK__Groups__149AF36A54708A68");
+            entity.HasKey(e => e.GroupId).HasName("PK__Groups__149AF36A051CE7DC");
 
             entity.HasOne(d => d.GroupAdminNavigation).WithMany(p => p.Groups).HasConstraintName("FK__Groups__GroupAdm__2E1BDC42");
 
@@ -44,14 +44,14 @@ public partial class ZivDBContext : DbContext
 
         modelBuilder.Entity<GroupType>(entity =>
         {
-            entity.HasKey(e => e.GroupTypeId).HasName("PK__GroupTyp__12195AAD56868D4A");
+            entity.HasKey(e => e.GroupTypeId).HasName("PK__GroupTyp__12195AAD2BB9488A");
 
             entity.Property(e => e.GroupTypeId).ValueGeneratedNever();
         });
 
         modelBuilder.Entity<Task>(entity =>
         {
-            entity.HasKey(e => e.TaskId).HasName("PK__Tasks__7C6949B12ECEB778");
+            entity.HasKey(e => e.TaskId).HasName("PK__Tasks__7C6949B14990756A");
 
             entity.HasOne(d => d.Group).WithMany(p => p.Tasks).HasConstraintName("FK__Tasks__GroupId__30F848ED");
 
@@ -64,21 +64,38 @@ public partial class ZivDBContext : DbContext
 
         modelBuilder.Entity<TaskStatus>(entity =>
         {
-            entity.HasKey(e => e.StatusId).HasName("PK__TaskStat__C8EE2063CC5B6E71");
+            entity.HasKey(e => e.StatusId).HasName("PK__TaskStat__C8EE206358433AAB");
 
             entity.Property(e => e.StatusId).ValueGeneratedNever();
         });
 
         modelBuilder.Entity<TaskType>(entity =>
         {
-            entity.HasKey(e => e.TypeId).HasName("PK__TaskType__516F03B584E80178");
+            entity.HasKey(e => e.TypeId).HasName("PK__TaskType__516F03B50BFFFE18");
 
             entity.Property(e => e.TypeId).ValueGeneratedNever();
         });
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PK__Users__1788CC4CC3E2C5BD");
+            entity.HasKey(e => e.UserId).HasName("PK__Users__1788CC4C4B6DA492");
+
+            entity.HasMany(d => d.GroupsNavigation).WithMany(p => p.Users)
+                .UsingEntity<Dictionary<string, object>>(
+                    "UsersInGroup",
+                    r => r.HasOne<Group>().WithMany()
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.ClientSetNull)
+                        .HasConstraintName("FK__UsersInGr__Group__37A5467C"),
+                    l => l.HasOne<User>().WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.ClientSetNull)
+                        .HasConstraintName("FK__UsersInGr__UserI__36B12243"),
+                    j =>
+                    {
+                        j.HasKey("UserId", "GroupId").HasName("PK__UsersInG__A6C1637A7A8BD61D");
+                        j.ToTable("UsersInGroup");
+                    });
         });
 
         OnModelCreatingPartial(modelBuilder);

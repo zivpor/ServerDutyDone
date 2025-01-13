@@ -112,10 +112,16 @@ namespace ServerDutyDone.Controllers
                     return Unauthorized("User is not logged in");
                 }
 
-                List<Group> groups = context.Groups.Where(g => g.GroupAdmin != u.UserId).ToList();
-                
+                List<Group> groups = context.Groups.Where(g => g.GroupAdmin != u.UserId).Include(g => g.Users).ToList();
+                List<Group> finalGroups = new List<Group>();
+                foreach (Group g in groups)
+                {
+                    if (g.Users.Where(uu => uu.UserId == u.UserId).FirstOrDefault() != null)
+                        finalGroups.Add(g);
+                }
+
                 List<GroupDTO> dtoGroups = new List<GroupDTO>();
-                foreach (var group in groups) 
+                foreach (var group in finalGroups)
                 {
                     dtoGroups.Add(new GroupDTO(group));
                 }
@@ -241,8 +247,8 @@ namespace ServerDutyDone.Controllers
                     TaskTypes = taskTypes,
                     TaskStatuses = statuses
                 };
-                
-               
+
+
                 return Ok(data);
             }
             catch (Exception ex)
