@@ -256,5 +256,20 @@ namespace ServerDutyDone.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        //[HttpPost("AddUserToGroup")]
+        //public async Task<IActionResult> AddUserToGroup([FromBody] DTO.GroupDTO group_dto, [FromBody] DTO.UserDTO user_dto)
+        //{
+        //    try
+        //    {
+                
+
+                
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+
+        //}
     }
 }

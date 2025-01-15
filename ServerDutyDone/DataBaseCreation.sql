@@ -100,6 +100,7 @@ insert into GroupType values (5,N'other')
 
 insert into Users(Email, Username, UserPassword) values ('o@o.com','o','o1')
 insert into Users(Email, Username, UserPassword, IsAdmin) values ('a@a.com','a','a1', 1)
+insert into Users(Email, Username, UserPassword) values ('ziv@gmail.com','ziv','ziv1')
 
 insert into Groups(GroupAdmin,GroupName,GroupType) values(1,'bffs',3)
 insert into Groups(GroupAdmin,GroupName,GroupType) values(2,'porat family',4)
