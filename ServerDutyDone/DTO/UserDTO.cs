@@ -7,6 +7,8 @@
         public string Username { get; set; }
         public string UserPassword { get; set; }
         public bool IsAdmin { get; set; }
+        public string ProfileImagePath { get; set; }
+        
         public UserDTO() { }
         public UserDTO(Models.User user)
         {

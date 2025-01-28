@@ -33,6 +33,7 @@ namespace ServerDutyDone
                 options.Cookie.IsEssential = true;
             });
             #endregion
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -45,7 +46,7 @@ namespace ServerDutyDone
             #region Add Session
             app.UseSession(); //In order to enable session management
             #endregion 
-
+            app.UseStaticFiles();
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
