@@ -199,8 +199,6 @@ namespace ServerDutyDone.Controllers
                     return Unauthorized($"User ith id: {u.UserId} is trying to create group for user {group_dto.GroupAdmin}");
                 }
 
-
-
                 // יצירת קבוצה בהתבסס על הקלט מהמשתמש
                 Models.Group modelgroup = new Models.Group
                 {
@@ -385,13 +383,13 @@ namespace ServerDutyDone.Controllers
             }
 
             //Get model user class from DB with matching email. 
-            Models.Group? group = context.Groups.Where(g => g.GroupId == userEmail).FirstOrDefault();
+            
             //Clear the tracking of all objects to avoid double tracking
             context.ChangeTracker.Clear();
 
-            if (user == null)
+            if (group == null)
             {
-                return Unauthorized("User is not found in the database");
+                return Unauthorized("group is not found in the database");
             }
 
 
@@ -414,7 +412,7 @@ namespace ServerDutyDone.Controllers
                 }
 
                 //Build path in the web root (better to a specific folder under the web root
-                string filePath = $"{this.WebHostenvironment.WebRootPath}\\profileImages\\{user.UserId}{extention}";
+                string filePath = $"{this.WebHostenvironment.WebRootPath}\\profileImages\\{group.GroupId}{extention}";
 
                 using (var stream = System.IO.File.Create(filePath))
                 {
@@ -434,9 +432,9 @@ namespace ServerDutyDone.Controllers
 
             }
 
-            DTO.UserDTO dtoUser = new DTO.UserDTO(user);
-            dtoUser.ProfileImagePath = GetProfileImageVirtualPath(dtoUser.UserId);
-            return Ok(dtoUser);
+            DTO.GroupDTO dtoGroup = new DTO.GroupDTO(group);
+            dtoGroup.GroupProfileImagePath = GetProfileImageVirtualPath(dtoGroup.GroupId);
+            return Ok(dtoGroup);
         }
     }
 }
