@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ServerDutyDone.DTO;
 using ServerDutyDone.Models;
+//using ServerDutyDone.ModelsBL;
 
 
 namespace ServerDutyDone.Controllers
@@ -373,7 +374,7 @@ namespace ServerDutyDone.Controllers
             return virtualPath;
         }
         [HttpPost("UploadGroupProfileImage")]
-        public async Task<IActionResult> UploadGroupProfileImageAsync(IFormFile file)
+        public async Task<IActionResult> UploadGroupProfileImageAsync(IFormFile file, [FromQuery] int groupid)
         {
             //Check if who is logged in
             string? userEmail = HttpContext.Session.GetString("LoggedInUser");
@@ -387,7 +388,7 @@ namespace ServerDutyDone.Controllers
             //Clear the tracking of all objects to avoid double tracking
             context.ChangeTracker.Clear();
 
-            if (group == null)
+            if (groupid == null)
             {
                 return Unauthorized("group is not found in the database");
             }
@@ -412,7 +413,7 @@ namespace ServerDutyDone.Controllers
                 }
 
                 //Build path in the web root (better to a specific folder under the web root
-                string filePath = $"{this.WebHostenvironment.WebRootPath}\\profileImages\\{group.GroupId}{extention}";
+                string filePath = $"{this.WebHostenvironment.WebRootPath}\\profileImages\\{groupid}{extention}";
 
                 using (var stream = System.IO.File.Create(filePath))
                 {
@@ -431,10 +432,130 @@ namespace ServerDutyDone.Controllers
                 }
 
             }
-
-            DTO.GroupDTO dtoGroup = new DTO.GroupDTO(group);
-            dtoGroup.GroupProfileImagePath = GetProfileImageVirtualPath(dtoGroup.GroupId);
+            Group g = context.Groups.Where(gg=>gg.GroupId == groupid).FirstOrDefault();
+            DTO.GroupDTO dtoGroup = new DTO.GroupDTO(g);
+            dtoGroup.GroupProfileImagePath = GetGroupProfileImageVirtualPath(dtoGroup.GroupId);
             return Ok(dtoGroup);
         }
-    }
+
+        //this function check which profile image exist and return the virtual path of it.
+        //if it does not exist it returns the default profile image virtual path
+        private string GetGroupProfileImageVirtualPath(int groupId)
+        {
+            string virtualPath = $"/groupProfileImages/{groupId}";
+            string path = $"{this.WebHostenvironment.WebRootPath}\\groupProfileImages\\{groupId}.png";
+            if (System.IO.File.Exists(path))
+            {
+                virtualPath += ".png";
+            }
+            else
+            {
+                path = $"{this.WebHostenvironment.WebRootPath}\\groupProfileImages\\{groupId}.jpg";
+                if (System.IO.File.Exists(path))
+                {
+                    virtualPath += ".jpg";
+                }
+                else
+                {
+                    virtualPath = $"/groupProfileImages/default.png";
+                }
+            }
+
+            return virtualPath;
+        }
+
+        [HttpPost("AddTask")]
+        public async Task<IActionResult> AddTask([FromBody] DTO.TaskDTO task_dto)
+        {
+            try
+            {
+                if (task_dto == null)
+                {
+                    return BadRequest("Invalid task data.");
+                }
+
+                //Check if who is logged in
+                string? userEmail = HttpContext.Session.GetString("LoggedInUser");
+                if (string.IsNullOrEmpty(userEmail))
+                {
+                    return Unauthorized("User is not logged in");
+                }
+
+                User? u = context.Users.Where(u => u.Email == userEmail).FirstOrDefault();
+
+                if (u == null)
+                {
+                    return Unauthorized("User is not in the DB");
+                }
+
+                if (u.UserId != task_dto.UserId)
+                {
+                    return Unauthorized($"User ith id: {u.UserId} is trying to add task for user {task_dto.UserId}");
+                }
+
+                // יצירת קבוצה בהתבסס על הקלט מהמשתמש
+                Models.Task modeltask = new Models.Task
+                {
+                    TaskName = task_dto.TaskName,
+                    StatusId = task_dto.StatusId,
+                    DueDay = task_dto.DueDay
+
+                };
+
+
+
+
+                // הוספת המשתמש למסד הנתונים
+                context.Tasks.Add(modeltask);
+                await context.SaveChangesAsync(); // שמירת השינויים במסד הנתונים
+                return Ok(modeltask.GroupId);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            //this function gets a file stream and check if it is an image
+
+            //[HttpGet("GetTasks")]
+            //public IActionResult GetTasks()
+            //{
+            //    try
+            //    {
+            //        //Check if who is logged in
+            //        string? userEmail = HttpContext.Session.GetString("LoggedInUser");
+            //        if (string.IsNullOrEmpty(userEmail))
+            //        {
+            //            return Unauthorized("User is not logged in");
+            //        }
+
+            //        User? u = context.Users.Where(u => u.Email == userEmail).FirstOrDefault();
+
+            //        if (u == null)
+            //        {
+            //            return Unauthorized("User is not logged in");
+            //        }
+
+            //        List<Task> tasks = context.Groups.Where(t => t.GroupAdmin != u.UserId).Include(g => g.Users).ToList();
+            //        List<Group> finalGroups = new List<Group>();
+            //        foreach (Group g in groups)
+            //        {
+            //            if (g.Users.Where(uu => uu.UserId == u.UserId).FirstOrDefault() != null)
+            //                finalGroups.Add(g);
+            //        }
+
+            //        List<GroupDTO> dtoGroups = new List<GroupDTO>();
+            //        foreach (var group in finalGroups)
+            //        {
+            //            dtoGroups.Add(new GroupDTO(group));
+            //        }
+
+            //        return Ok(dtoGroups);
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        return BadRequest(ex.Message);
+            //    }
+            //}
+        }
+    
 }

@@ -1,23 +1,22 @@
 ﻿using System.Text.RegularExpressions;
 using Microsoft.EntityFrameworkCore;
-using ServerDutyDone.Models;
+using ServerDutyDone.DTO;
 
-namespace ServerDutyDone.ModelsBL
+
+namespace ServerDutyDone.Models
 {
-    public class ZivDBContext: DbContext
+    public partial class ZivDBContext: DbContext
 
     {
         public User? GetUser(string email)
-        {      
-            return this.Users.Where(u => u.UserEmail == email)
-                                .Include(u => u.UserTasks)
-                                .ThenInclude(t => t.TaskComments)
-                                .FirstOrDefault();
+        {
+            return this.Users.FirstOrDefault(u => u.Email == email);
+                                
         }
 
         public Group? GetGroup(int groupId)
         {
-            return this.Groups.Where(g => g.GroupId == groupId).FirstOrDefault();
+            return this.Groups.FirstOrDefault(g => g.GroupId == groupId);
         }
     }
 }
