@@ -384,7 +384,7 @@ namespace ServerDutyDone.Controllers
             }
 
             //Get model user class from DB with matching email. 
-            
+
             //Clear the tracking of all objects to avoid double tracking
             context.ChangeTracker.Clear();
 
@@ -432,7 +432,7 @@ namespace ServerDutyDone.Controllers
                 }
 
             }
-            Group g = context.Groups.Where(gg=>gg.GroupId == groupid).FirstOrDefault();
+            Group g = context.Groups.Where(gg => gg.GroupId == groupid).FirstOrDefault();
             DTO.GroupDTO dtoGroup = new DTO.GroupDTO(g);
             dtoGroup.GroupProfileImagePath = GetGroupProfileImageVirtualPath(dtoGroup.GroupId);
             return Ok(dtoGroup);
@@ -557,5 +557,5 @@ namespace ServerDutyDone.Controllers
             //    }
             //}
         }
-    
+    }
 }
