@@ -13,6 +13,7 @@
             this.GroupAdmin = group.GroupAdmin;
             this.GroupName = group.GroupName;
             this.GroupType = group.GroupType;
+            this.GroupId = group.GroupId;
         }
 
     }

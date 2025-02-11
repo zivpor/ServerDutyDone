@@ -494,21 +494,15 @@ namespace ServerDutyDone.Controllers
                 }
 
                 // יצירת קבוצה בהתבסס על הקלט מהמשתמש
-                Models.Task modeltask = new Models.Task
-                {
-                    TaskName = task_dto.TaskName,
-                    StatusId = task_dto.StatusId,
-                    DueDay = task_dto.DueDay
-
-                };
+                Models.Task modeltask = task_dto.GetModel();
 
 
 
 
                 // הוספת המשתמש למסד הנתונים
                 context.Tasks.Add(modeltask);
-                await context.SaveChangesAsync(); // שמירת השינויים במסד הנתונים
-                return Ok(modeltask.GroupId);
+                context.SaveChanges(); // שמירת השינויים במסד הנתונים
+                return Ok(modeltask.TaskId);
             }
             catch (Exception ex)
             {
