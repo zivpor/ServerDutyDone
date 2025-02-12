@@ -108,7 +108,11 @@ insert into Groups(GroupAdmin,GroupName,GroupType) values(2,'porat family',4)
 insert into UsersInGroup values (2,1)
 insert into UsersInGroup values (1,2)
 
+insert into Tasks(TaskType,DueDay,UserId,TaskName,GroupId,StatusId) values(1,'03/04/2025',1,'math test',1,1)
+insert into Tasks(TaskType,DueDay,UserId,TaskName,GroupId,StatusId) values(4,'02/14/2025',1,'going to the mall',1,1)
 
+
+SELECT*From Tasks
 
 SELECT*From Groups
 

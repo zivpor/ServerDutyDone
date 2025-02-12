@@ -508,6 +508,7 @@ namespace ServerDutyDone.Controllers
             {
                 return BadRequest(ex.Message);
             }
+        }
             //this function gets a file stream and check if it is an image
 
             //[HttpGet("GetTasks")]
@@ -550,6 +551,37 @@ namespace ServerDutyDone.Controllers
             //        return BadRequest(ex.Message);
             //    }
             //}
+         [HttpGet("GetGroupTasks")]
+        public IActionResult GetGroupTasks(GroupDTO groupDTO)
+        {
+            try
+            {
+                //Check if who is logged in
+                string? userEmail = HttpContext.Session.GetString("LoggedInUser");
+                if (string.IsNullOrEmpty(userEmail))
+                {
+                    return Unauthorized("User is not logged in");
+                }
+
+                User? u = context.Users.Where(u => u.Email == userEmail).FirstOrDefault();
+
+                if (u == null)
+                {
+                    return Unauthorized("User is not logged in");
+                }
+
+                List<Models.Task> tasks = context.Tasks.Where(t => t.GroupId == groupDTO.GroupId).ToList();
+               
+
+                
+
+                return Ok(tasks);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
-}
+    }
+
