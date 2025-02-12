@@ -551,8 +551,8 @@ namespace ServerDutyDone.Controllers
             //        return BadRequest(ex.Message);
             //    }
             //}
-         [HttpGet("GetGroupTasks")]
-        public IActionResult GetGroupTasks(GroupDTO groupDTO)
+         [HttpPost("GetGroupTasks")]
+        public IActionResult GetGroupTasks([FromBody] GroupDTO groupDTO)
         {
             try
             {
