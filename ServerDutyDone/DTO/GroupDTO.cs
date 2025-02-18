@@ -14,6 +14,7 @@
             this.GroupName = group.GroupName;
             this.GroupType = group.GroupType;
             this.GroupId = group.GroupId;
+            this.GroupProfileImagePath = "";
         }
 
     }

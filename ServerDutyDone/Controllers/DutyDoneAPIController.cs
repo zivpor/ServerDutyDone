@@ -571,11 +571,16 @@ namespace ServerDutyDone.Controllers
                 }
 
                 List<Models.Task> tasks = context.Tasks.Where(t => t.GroupId == groupDTO.GroupId).ToList();
-               
+                List<DTO.TaskDTO> list = new List<TaskDTO>();
+                foreach(Models.Task task in tasks)
+                {
+                    list.Add(new TaskDTO(task));
+                }
+
 
                 
 
-                return Ok(tasks);
+                return Ok(list);
             }
             catch (Exception ex)
             {
