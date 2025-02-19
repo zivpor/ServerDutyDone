@@ -509,49 +509,34 @@ namespace ServerDutyDone.Controllers
                 return BadRequest(ex.Message);
             }
         }
-            //this function gets a file stream and check if it is an image
 
-            //[HttpGet("GetTasks")]
-            //public IActionResult GetTasks()
-            //{
-            //    try
-            //    {
-            //        //Check if who is logged in
-            //        string? userEmail = HttpContext.Session.GetString("LoggedInUser");
-            //        if (string.IsNullOrEmpty(userEmail))
-            //        {
-            //            return Unauthorized("User is not logged in");
-            //        }
 
-            //        User? u = context.Users.Where(u => u.Email == userEmail).FirstOrDefault();
+        [HttpGet("GetTasks")]
+        public IActionResult GetTasks()
+        {
+            try
+            {
+                //Check if who is logged in
+                string? userEmail = HttpContext.Session.GetString("LoggedInUser");
+                if (string.IsNullOrEmpty(userEmail))
+                {
+                    return Unauthorized("User is not logged in");
+                }
 
-            //        if (u == null)
-            //        {
-            //            return Unauthorized("User is not logged in");
-            //        }
+                User? u = context.Users.Where(u => u.Email == userEmail).FirstOrDefault();
 
-            //        List<Task> tasks = context.Groups.Where(t => t.GroupAdmin != u.UserId).Include(g => g.Users).ToList();
-            //        List<Group> finalGroups = new List<Group>();
-            //        foreach (Group g in groups)
-            //        {
-            //            if (g.Users.Where(uu => uu.UserId == u.UserId).FirstOrDefault() != null)
-            //                finalGroups.Add(g);
-            //        }
-
-            //        List<GroupDTO> dtoGroups = new List<GroupDTO>();
-            //        foreach (var group in finalGroups)
-            //        {
-            //            dtoGroups.Add(new GroupDTO(group));
-            //        }
-
-            //        return Ok(dtoGroups);
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        return BadRequest(ex.Message);
-            //    }
-            //}
-         [HttpPost("GetGroupTasks")]
+                if (u == null)
+                {
+                    return Unauthorized("User is not logged in");
+                }
+                return Ok(u.Tasks);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpPost("GetGroupTasks")]
         public IActionResult GetGroupTasks([FromBody] GroupDTO groupDTO)
         {
             try
