@@ -511,30 +511,81 @@ namespace ServerDutyDone.Controllers
         }
 
 
+        //[HttpGet("GetTasks")]
+        //public IActionResult GetTasks()
+        //{
+        //    try
+        //    {
+        //        //Check if who is logged in
+        //        string? userEmail = HttpContext.Session.GetString("LoggedInUser");
+        //        if (string.IsNullOrEmpty(userEmail))
+        //        {
+        //            return Unauthorized("User is not logged in");
+        //        }
+
+        //        User? u = context.Users.Where(u => u.Email == userEmail).FirstOrDefault();
+
+        //        if (u == null)
+        //        {
+        //            return Unauthorized("User is not logged in");
+        //        }
+        //        return Ok(u.Tasks);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
         [HttpGet("GetTasks")]
         public IActionResult GetTasks()
         {
             try
             {
-                //Check if who is logged in
-                string? userEmail = HttpContext.Session.GetString("LoggedInUser");
-                if (string.IsNullOrEmpty(userEmail))
-                {
-                    return Unauthorized("User is not logged in");
-                }
+                List<Models.Task> list = context.GetTasks();
 
-                User? u = context.Users.Where(u => u.Email == userEmail).FirstOrDefault();
+                List<DTO.TaskDTO> tasks = new List<DTO.TaskDTO>();
 
-                if (u == null)
+                foreach (Models.Task t in list)
                 {
-                    return Unauthorized("User is not logged in");
+                    DTO.TaskDTO task = new DTO.TaskDTO(t);
+
+                    tasks.Add(task);
                 }
-                return Ok(u.Tasks);
+                return Ok(tasks);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
+
+        }
+        [HttpPost("GetFilteredTasks")]
+        public IActionResult GetFilteredTasks(TaskType taskType)
+        {
+            try
+            {
+                List<Models.Task> list = context.GetTasks();
+                List<DTO.TaskDTO> tasks = new List<DTO.TaskDTO>();
+
+                foreach (Models.Task t in list)
+                {
+                    DTO.TaskDTO task = null;
+                    if (t.TaskType == taskType.TypeId)
+                    {
+                        task = new DTO.TaskDTO(t);
+                    }
+                    else
+                        tasks = null;
+
+                    tasks.Add(task);
+                }
+                return Ok(tasks);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
         }
         [HttpPost("GetGroupTasks")]
         public IActionResult GetGroupTasks([FromBody] GroupDTO groupDTO)

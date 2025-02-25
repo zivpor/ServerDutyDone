@@ -18,5 +18,9 @@ namespace ServerDutyDone.Models
         {
             return this.Groups.FirstOrDefault(g => g.GroupId == groupId);
         }
+        public List<Task> GetTasks()
+        {
+            return this.Tasks.ToList();
+        }
     }
 }
