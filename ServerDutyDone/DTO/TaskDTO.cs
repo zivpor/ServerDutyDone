@@ -18,9 +18,13 @@
         public TaskDTO(Models.Task task)
         {
             this.TaskName = task.TaskName;
-            this.StatusId = 1;
+            this.StatusId = task.StatusId;
             this.TaskId = task.TaskId;
             this.DueDay = task.DueDay;
+            this.TaskType = task.TaskType;
+            this.UserId = task.UserId;
+            this.GroupId = task.GroupId;
+
         }
         public Models.Task GetModel()
         {
