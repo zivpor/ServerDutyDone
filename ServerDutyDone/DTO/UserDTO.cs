@@ -7,6 +7,7 @@
         public string Username { get; set; }
         public string UserPassword { get; set; }
         public bool IsAdmin { get; set; }
+        public bool IsBlocked { get; set; }
         public string ProfileImagePath { get; set; }
         
         public UserDTO() { }
@@ -17,6 +18,7 @@
             this.UserPassword = user.UserPassword;
             this.UserId = user.UserId;
             this.IsAdmin = user.IsAdmin;
+            this.IsBlocked = user.IsBlocked;
         }
 
     }

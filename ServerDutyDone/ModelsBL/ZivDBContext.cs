@@ -22,5 +22,10 @@ namespace ServerDutyDone.Models
         {
             return this.Tasks.ToList();
         }
+        public Models.User? GetUser1(int id)
+        {
+            return this.Users.Where(u => u.UserId == id)
+                                .FirstOrDefault();
+        }
     }
 }

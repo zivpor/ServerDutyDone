@@ -22,6 +22,8 @@ public partial class User
 
     public bool IsAdmin { get; set; }
 
+    public bool IsBlocked { get; set; }
+
     [InverseProperty("GroupAdminNavigation")]
     public virtual ICollection<Group> Groups { get; set; } = new List<Group>();
 

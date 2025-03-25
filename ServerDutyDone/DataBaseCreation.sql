@@ -15,7 +15,8 @@ UserId INT PRIMARY KEY Identity,        -- מפתח ראשי
 Email NVARCHAR(100),           --איימיל של המשתמש
 Username NVARCHAR(100),        --השם משתמש
 UserPassword NVARCHAR(100),    --הסיסמה של המשתמש
-IsAdmin bit default(0) not null --האם המשתמש הוא מנהל המערכת
+IsAdmin bit default(0) not null ,--האם המשתמש הוא מנהל המערכת
+IsBlocked bit default(0) not null,
 );
 
 CREATE TABLE TaskType(
