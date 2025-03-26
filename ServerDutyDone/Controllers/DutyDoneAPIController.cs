@@ -643,6 +643,38 @@ namespace ServerDutyDone.Controllers
             }
 
         }
+        [HttpGet("GetUsers")]
+        public IActionResult GetUsers()
+        {
+            try
+            {
+                ////Check if who is logged in
+                //string? userEmail = HttpContext.Session.GetString("loggedInUser");
+                //if (string.IsNullOrEmpty(userEmail))
+                //{
+                //    return Unauthorized("User is not logged in");
+                //}
+
+                //Read all users
+
+                List<Models.User> list = context.GetUsers();
+
+                List<UserDTO> users = new List<UserDTO>();
+
+                foreach (Models.User u in list)
+                {
+                    UserDTO user = new UserDTO(u);
+
+                    users.Add(user);
+                }
+                return Ok(users);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
     }
     }
 
