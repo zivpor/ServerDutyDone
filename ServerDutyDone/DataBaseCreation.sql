@@ -52,6 +52,8 @@ UserId INT,  --מפתח זר לטבלת המשתמשים
 TaskName NVARCHAR(100), --שם המשימה
 GroupId int, --מפתח זר לטבלת הקבוצה
 StatusId int,  --מפתח זר לטבלת סטטוס המשימה
+TaskDescription NVARCHAR(500),
+TaskUpdate NVARCHAR(500),
  FOREIGN KEY (GroupId) REFERENCES Groups(GroupId),   -- 
  FOREIGN KEY (UserId) REFERENCES Users(UserId),   -- 
  FOREIGN KEY (StatusId) REFERENCES TaskStatus(StatusId),   --
@@ -109,8 +111,8 @@ insert into Groups(GroupAdmin,GroupName,GroupType) values(2,'porat family',4)
 insert into UsersInGroup values (2,1)
 insert into UsersInGroup values (1,2)
 
-insert into Tasks(TaskType,DueDay,UserId,TaskName,GroupId,StatusId) values(1,'03/04/2025',1,'math test',1,1)
-insert into Tasks(TaskType,DueDay,UserId,TaskName,GroupId,StatusId) values(4,'02/14/2025',1,'going to the mall',1,1)
+insert into Tasks(TaskType,DueDay,UserId,TaskName,GroupId,StatusId,TaskDescription) values(1,'03/04/2025',1,'math test',1,1,'vektorim and hakirot')
+insert into Tasks(TaskType,DueDay,UserId,TaskName,GroupId,StatusId,TaskDescription) values(4,'02/14/2025',1,'going to the mall',1,1,'to big glilot')
 
 
 SELECT*From Tasks

@@ -14,6 +14,8 @@
         public int? GroupId { get; set; }
 
         public int? StatusId { get; set; }
+        public string? TaskDescription { get; set; }
+        public string? TaskUpdate { get; set; }
         public TaskDTO() { }
         public TaskDTO(Models.Task task)
         {
@@ -24,7 +26,8 @@
             this.TaskType = task.TaskType;
             this.UserId = task.UserId;
             this.GroupId = task.GroupId;
-
+            this.TaskDescription = task.TaskDescription;
+            this.TaskUpdate = task.TaskUpdate;
         }
         public Models.Task GetModel()
         {
@@ -36,7 +39,9 @@
                 UserId = this.UserId,
                 TaskName = this.TaskName,
                 GroupId = this.GroupId,
-                StatusId = this.StatusId
+                StatusId = this.StatusId,
+                TaskDescription= this.TaskDescription,
+                TaskUpdate = this.TaskUpdate
             };
             return task;
         }

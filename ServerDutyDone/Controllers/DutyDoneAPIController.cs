@@ -494,7 +494,7 @@ namespace ServerDutyDone.Controllers
                 }
 
                 task_dto.StatusId = 1; //New task id
-                // יצירת קבוצה בהתבסס על הקלט מהמשתמש
+                // יצירת משימה בהתבסס על הקלט מהמשתמש
                 Models.Task modeltask = task_dto.GetModel();
 
 

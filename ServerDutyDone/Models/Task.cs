@@ -24,6 +24,12 @@ public partial class Task
 
     public int? StatusId { get; set; }
 
+    [StringLength(500)]
+    public string? TaskDescription { get; set; }
+
+    [StringLength(500)]
+    public string? TaskUpdate { get; set; }
+
     [ForeignKey("GroupId")]
     [InverseProperty("Tasks")]
     public virtual Group? Group { get; set; }

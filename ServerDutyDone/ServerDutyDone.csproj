@@ -21,7 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\groupProfileImages\" />
     <Folder Include="wwwroot\profileImages\" />
   </ItemGroup>
 
