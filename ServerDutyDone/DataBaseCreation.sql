@@ -107,6 +107,7 @@ insert into Users(Email, Username, UserPassword) values ('ziv@gmail.com','ziv','
 
 insert into Groups(GroupAdmin,GroupName,GroupType) values(1,'bffs',3)
 insert into Groups(GroupAdmin,GroupName,GroupType) values(2,'porat family',4)
+insert into Groups(GroupAdmin,GroupName,GroupType) values(2,'test',4)
 
 insert into UsersInGroup values (2,1)
 insert into UsersInGroup values (1,2)
@@ -120,7 +121,7 @@ SELECT*From Tasks
 SELECT*From Groups
 
 SELECT*From Users
-
+select * from UsersInGroup
 --scaffold-DbContext "Server = (localdb)\MSSQLLocalDB;Initial Catalog=DutyDone_DB;User ID=TaskAdminUser;Password=kukuPassword;" Microsoft.EntityFrameworkCore.SqlServer -OutPutDir Models -Context ZivDBContext -DataAnnotations -force
 
 

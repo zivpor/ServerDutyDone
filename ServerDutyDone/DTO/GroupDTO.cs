@@ -6,7 +6,7 @@
         public int? GroupAdmin { get; set; }
         public string? GroupName { get; set; }
         public int? GroupType { get; set; }
-        public string GroupProfileImagePath { get; set; }
+        public string? GroupProfileImagePath { get; set; }
         public GroupDTO() { }
         public GroupDTO(Models.Group group)
         {

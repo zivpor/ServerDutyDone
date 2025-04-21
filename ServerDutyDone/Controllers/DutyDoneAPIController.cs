@@ -125,10 +125,49 @@ namespace ServerDutyDone.Controllers
                 List<GroupDTO> dtoGroups = new List<GroupDTO>();
                 foreach (var group in finalGroups)
                 {
-                    dtoGroups.Add(new GroupDTO(group));
+                    GroupDTO dto = new GroupDTO(group);
+                    dto.GroupProfileImagePath = GetGroupProfileImageVirtualPath(dto.GroupId);
+                    dtoGroups.Add(dto);
                 }
 
                 return Ok(dtoGroups);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        //פעולה שמחזירה רשימה של הקבוצות שהמחובר לא מנהל
+        [HttpGet("AddGroupToUser")]
+        public IActionResult AddGroupToUser(int groupId)
+        {
+            try
+            {
+                //Check if who is logged in
+                string? userEmail = HttpContext.Session.GetString("LoggedInUser");
+                if (string.IsNullOrEmpty(userEmail))
+                {
+                    return Unauthorized("User is not logged in");
+                }
+
+                User? u = context.Users.Where(u => u.Email == userEmail).Include(u=>u.Groups).FirstOrDefault();
+
+                if (u == null)
+                {
+                    return Unauthorized("User is not logged in");
+                }
+
+
+                Group? group = context.Groups.Where(g => g.GroupId == groupId).FirstOrDefault();
+
+                if (group != null)
+                    u.GroupsNavigation.Add(group);
+                else
+                    return BadRequest();
+
+                context.SaveChanges();
+                return Ok();
             }
             catch (Exception ex)
             {
