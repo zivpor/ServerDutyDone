@@ -581,7 +581,20 @@ namespace ServerDutyDone.Controllers
         {
             try
             {
-                List<Models.Task> list = context.GetTasks();
+                //Check if who is logged in
+                string? userEmail = HttpContext.Session.GetString("LoggedInUser");
+                if (string.IsNullOrEmpty(userEmail))
+                {
+                    return Unauthorized("User is not logged in");
+                }
+
+                User? u = context.Users.Where(u => u.Email == userEmail).FirstOrDefault();
+
+                if (u == null)
+                {
+                    return Unauthorized("User is not in the DB");
+                }
+                List<Models.Task> list = context.GetTasks(u.UserId);
 
                 List<DTO.TaskDTO> tasks = new List<DTO.TaskDTO>();
 
@@ -600,24 +613,38 @@ namespace ServerDutyDone.Controllers
 
         }
         [HttpPost("GetFilteredTasks")]
-        public IActionResult GetFilteredTasks(TaskType taskType)
+        public IActionResult GetFilteredTasks(DTO.TaskTypeDTO taskType)
         {
             try
             {
-                List<Models.Task> list = context.GetTasks();
+                //Check if who is logged in
+                string? userEmail = HttpContext.Session.GetString("LoggedInUser");
+                if (string.IsNullOrEmpty(userEmail))
+                {
+                    return Unauthorized("User is not logged in");
+                }
+
+                User? u = context.Users.Where(u => u.Email == userEmail).FirstOrDefault();
+
+                if (u == null)
+                {
+                    return Unauthorized("User is not in the DB");
+                }
+
+                List<Models.Task> list = context.GetTasks(u.UserId);
                 List<DTO.TaskDTO> tasks = new List<DTO.TaskDTO>();
 
                 foreach (Models.Task t in list)
                 {
                     DTO.TaskDTO task = null;
-                    if (t.TaskType == taskType.TypeId)
+                    if (t.TaskType == taskType.TaskTypeId)
                     {
                         task = new DTO.TaskDTO(t);
+                        tasks.Add(task);
                     }
-                    else
-                        tasks = null;
+                   
 
-                    tasks.Add(task);
+                   
                 }
                 return Ok(tasks);
             }
@@ -669,7 +696,7 @@ namespace ServerDutyDone.Controllers
             try
             {
                 //Create model user class
-                Models.User user = context.GetUser1(u.UserId);
+                Models.User? user = context.GetUser1(u.UserId);
                 user.IsBlocked = u.IsBlocked;
                 context.Entry(user).State = EntityState.Modified;
 
@@ -703,7 +730,7 @@ namespace ServerDutyDone.Controllers
                 foreach (Models.User u in list)
                 {
                     UserDTO user = new UserDTO(u);
-
+                    user.ProfileImagePath = GetProfileImageVirtualPath(u.UserId);
                     users.Add(user);
                 }
                 return Ok(users);

@@ -18,9 +18,33 @@ namespace ServerDutyDone.Models
         {
             return this.Groups.FirstOrDefault(g => g.GroupId == groupId);
         }
-        public List<Task> GetTasks()
+        public List<Task> GetTasks(int userId)
         {
-            return this.Tasks.ToList();
+            User? u  = this.Users.Where(u => u.UserId == userId).FirstOrDefault();
+            List<Group> groupsAsAdmin = this.Groups.Include(g=>g.Tasks).Where(g => g.GroupAdmin == userId).ToList();
+            List<Group> groups = this.Groups.Include(g => g.Tasks).Where(g => g.Users.Contains(u)).ToList();
+
+
+            List<Task> tasks = new List<Task>();
+
+            foreach (Group g in groups)
+            {
+                foreach (Task t in g.Tasks)
+                {
+                    tasks.Add(t);
+                }
+            }
+
+            foreach (Group g in groupsAsAdmin)
+            {
+                foreach (Task t in g.Tasks)
+                {
+                    tasks.Add(t);
+                }
+            }
+
+
+            return tasks;
         }
         public List<User> GetUsers()
         {
