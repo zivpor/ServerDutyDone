@@ -174,6 +174,52 @@ namespace ServerDutyDone.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet("AddUserToGroup")]
+        public IActionResult AddUserToGroup([FromQuery] string email, [FromQuery] int groupId)
+        {
+            try
+            {
+                //Check if who is logged in
+                string? userEmail = HttpContext.Session.GetString("LoggedInUser");
+                if (string.IsNullOrEmpty(userEmail))
+                {
+                    return Unauthorized("User is not logged in");
+                }
+
+                User? u = context.Users.Where(u => u.Email == userEmail).Include(u => u.Groups).FirstOrDefault();
+
+                if (u == null)
+                {
+                    return Unauthorized("User is not logged in");
+                }
+
+
+                Group? group = context.Groups.Where(g => g.GroupId == groupId).FirstOrDefault();
+
+                if (group != null)
+                {
+                    if (group.GroupAdmin == null || group.GroupAdmin != u.UserId)
+                    {
+                        return Unauthorized("User is not group admin");
+                    }
+
+                    User? theUser = context.Users.Include(uu => uu.Groups).Where(uu => uu.Email == email).FirstOrDefault();
+                    if (theUser == null)
+                        return BadRequest("email does not exist");
+                    theUser.GroupsNavigation.Add(group);
+                    context.SaveChanges();
+                }
+                else
+                    return BadRequest();
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
         //פעולה שמחזירה רשימה של הקבוצות שהמחובר  מנהל
         [HttpGet("GetManagerGroups")]
         public IActionResult GetManagerGroups()
