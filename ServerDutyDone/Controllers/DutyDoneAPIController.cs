@@ -151,7 +151,7 @@ namespace ServerDutyDone.Controllers
                     return Unauthorized("User is not logged in");
                 }
 
-                User? u = context.Users.Where(u => u.Email == userEmail).Include(u=>u.Groups).FirstOrDefault();
+                User? u = context.Users.Where(u => u.Email == userEmail).Include(u => u.Groups).FirstOrDefault();
 
                 if (u == null)
                 {
@@ -688,9 +688,9 @@ namespace ServerDutyDone.Controllers
                         task = new DTO.TaskDTO(t);
                         tasks.Add(task);
                     }
-                   
 
-                   
+
+
                 }
                 return Ok(tasks);
             }
@@ -721,13 +721,13 @@ namespace ServerDutyDone.Controllers
 
                 List<Models.Task> tasks = context.Tasks.Where(t => t.GroupId == groupDTO.GroupId).ToList();
                 List<DTO.TaskDTO> list = new List<TaskDTO>();
-                foreach(Models.Task task in tasks)
+                foreach (Models.Task task in tasks)
                 {
                     list.Add(new TaskDTO(task));
                 }
 
 
-                
+
 
                 return Ok(list);
             }
@@ -787,6 +787,39 @@ namespace ServerDutyDone.Controllers
             }
 
         }
+        //    [HttpGet("GetUsersInGroup")]
+        //    public IActionResult GetUsersInGroup([FromBody] GroupDTO groupDTO)
+        //    {
+        //        try
+        //        {
+        //            //Check if who is logged in
+        //            string? userEmail = HttpContext.Session.GetString("loggedInUser");
+        //            if (string.IsNullOrEmpty(userEmail))
+        //            {
+        //                return Unauthorized("User is not logged in");
+        //            }
+
+        //            //Read all users
+
+        //            List<User> list = context.Users.Where(t => t.GroupsNavigation == groupDTO.GroupId).;
+
+        //            List<UserDTO> users = new List<UserDTO>();
+
+        //            foreach (Models.User u in list)
+        //            {
+        //                UserDTO user = new UserDTO(u);
+        //                user.ProfileImagePath = GetProfileImageVirtualPath(u.UserId);
+        //                users.Add(user);
+        //            }
+        //            return Ok(users);
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            return BadRequest(ex.Message);
+        //        }
+
+        //    }
+        //}
     }
-    }
+}
 
