@@ -20,6 +20,17 @@
             this.IsAdmin = user.IsAdmin;
             this.IsBlocked = user.IsBlocked;
         }
+        public Models.User GetModel()
+        {
+            return new Models.User()
+            {
+                UserId = this.UserId,
+                Username = this.Username,
+                UserPassword = this.UserPassword,
+                Email = this.Email,
+                IsAdmin = this.IsAdmin
+            };
+        }
 
     }
 }

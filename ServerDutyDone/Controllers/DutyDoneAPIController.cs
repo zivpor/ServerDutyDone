@@ -787,39 +787,63 @@ namespace ServerDutyDone.Controllers
             }
 
         }
-        //    [HttpGet("GetUsersInGroup")]
-        //    public IActionResult GetUsersInGroup([FromBody] GroupDTO groupDTO)
-        //    {
-        //        try
-        //        {
-        //            //Check if who is logged in
-        //            string? userEmail = HttpContext.Session.GetString("loggedInUser");
-        //            if (string.IsNullOrEmpty(userEmail))
-        //            {
-        //                return Unauthorized("User is not logged in");
-        //            }
+        [HttpPost("GetUsersInGroup")]
+        public IActionResult GetUsersInGroup([FromBody] GroupDTO groupDTO)
+        {
+            try
+            {
+                //Check if who is logged in
+                string? userEmail = HttpContext.Session.GetString("LoggedInUser");
+                if (string.IsNullOrEmpty(userEmail))
+                {
+                    return Unauthorized("User is not logged in");
+                }
 
-        //            //Read all users
+                //Read all users
 
-        //            List<User> list = context.Users.Where(t => t.GroupsNavigation == groupDTO.GroupId).;
+              
 
-        //            List<UserDTO> users = new List<UserDTO>();
+                List<UserDTO> users = new List<UserDTO>();
+                List<Models.User> list = context.GetUsersInGroup(groupDTO.GroupId);
 
-        //            foreach (Models.User u in list)
-        //            {
-        //                UserDTO user = new UserDTO(u);
-        //                user.ProfileImagePath = GetProfileImageVirtualPath(u.UserId);
-        //                users.Add(user);
-        //            }
-        //            return Ok(users);
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            return BadRequest(ex.Message);
-        //        }
+                foreach (Models.User u in list)
+                {
+                    UserDTO user = new UserDTO(u);
+                    user.ProfileImagePath = GetProfileImageVirtualPath(u.UserId);
+                    users.Add(user);
+                }
+                return Ok(users);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
 
-        //    }
-        //}
+        }
+        [HttpPost("update")]
+        public IActionResult UpdateUser([FromBody] DTO.UserDTO userDto)
+        {
+            try
+            {
+
+                //Get model user class from DB with matching email. 
+                Models.User modelsUser = userDto.GetModel();
+
+                context.Users.Update(modelsUser);
+                context.SaveChanges();
+
+                //User was added!
+                DTO.UserDTO dtoUser = new DTO.UserDTO(modelsUser);
+                return Ok(dtoUser);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
+
     }
 }
+
 

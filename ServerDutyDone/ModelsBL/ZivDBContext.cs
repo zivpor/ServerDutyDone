@@ -1,5 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using Microsoft.EntityFrameworkCore;
+
 using ServerDutyDone.DTO;
 
 
@@ -14,6 +15,14 @@ namespace ServerDutyDone.Models
                                 
         }
 
+        public List<User> GetUsersInGroup(int groupId)
+        {
+            Group? group = this.Groups.Include(g=>g.Users).Where(g => g.GroupId == groupId).FirstOrDefault();
+
+            List<User>? users = group.Users.ToList();
+
+            return users;
+        }
         public Group? GetGroup(int groupId)
         {
             return this.Groups.FirstOrDefault(g => g.GroupId == groupId);
