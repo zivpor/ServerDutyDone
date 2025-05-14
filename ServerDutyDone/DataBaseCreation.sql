@@ -122,6 +122,7 @@ SELECT*From Groups
 
 SELECT*From Users
 select * from UsersInGroup
+delete from usersingroup where userid = 3
 --scaffold-DbContext "Server = (localdb)\MSSQLLocalDB;Initial Catalog=DutyDone_DB;User ID=TaskAdminUser;Password=kukuPassword;" Microsoft.EntityFrameworkCore.SqlServer -OutPutDir Models -Context ZivDBContext -DataAnnotations -force
 
 
