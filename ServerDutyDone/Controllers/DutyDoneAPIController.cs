@@ -245,6 +245,8 @@ namespace ServerDutyDone.Controllers
                 List<GroupDTO> dtoGroups = new List<GroupDTO>();
                 foreach (var group in groups)
                 {
+                    GroupDTO g = new GroupDTO(group);
+                    g.GroupProfileImagePath = GetGroupProfileImageVirtualPath(group.GroupId);
                     dtoGroups.Add(new GroupDTO(group));
                 }
 
