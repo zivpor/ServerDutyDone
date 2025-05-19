@@ -120,6 +120,7 @@ namespace ServerDutyDone.Controllers
                 {
                     if (g.Users.Where(uu => uu.UserId == u.UserId).FirstOrDefault() != null)
                         finalGroups.Add(g);
+
                 }
 
                 List<GroupDTO> dtoGroups = new List<GroupDTO>();
@@ -247,7 +248,7 @@ namespace ServerDutyDone.Controllers
                 {
                     GroupDTO g = new GroupDTO(group);
                     g.GroupProfileImagePath = GetGroupProfileImageVirtualPath(group.GroupId);
-                    dtoGroups.Add(new GroupDTO(group));
+                    dtoGroups.Add(g);
                 }
 
                 return Ok(dtoGroups);
